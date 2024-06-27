@@ -1,0 +1,126 @@
+"use client";
+
+// importing necessities
+import React, { useState } from "react";
+import InputField from "@/components/common/InputField";
+import SignupData from "@/constants/commonSignupData";
+import CTCButton from "../common/CTCButton";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+
+
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
+import { signupAtom } from "@/app/store/atoms/signup";
+
+// interface
+interface FormData {
+  fullName: string;
+  email: string;
+  password: string;
+  contactNo: string;
+  address: string; // Assuming address is a string
+}
+
+const Signup: React.FC<{ role: string }> = ({ role }) => {
+  // hooks for reading different values
+
+  const [signUpData, setSignUpData] = useRecoilState(signupAtom);
+
+  const router = useRouter();
+  
+  const [data, setData] = useState<any>({
+    fullName: "",
+    email: "",
+    password: "",
+    contactNo: "",
+    address: "",
+    role: role,
+  });
+
+  const setSignupData = useSetRecoilState(signupAtom);
+
+  const signupValues = useRecoilValue(signupAtom);
+
+  // Function to handle input change
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setData({
+      ...data,
+      [name]: value,
+    });
+  };
+
+  async function submitHandler(e: any) {
+    try {
+
+      e.preventDefault();
+      setSignupData(data);
+
+      
+
+    } catch (error: any) {
+
+      toast.error(error?.response?.data?.message || "Signup failed");
+      
+    }
+  }
+
+  return (
+    // main div
+    <div className="bg-white min-h-screen text-black text-lg flex justify-center items-center p-10">
+      {/* inner div */}
+      <div className="bg-[#EDF6FF] flex flex-col p-8 rounded-md shadow-xl justify-center items-center gap-4 ">
+        {/* heading */}
+        <h1 className="text-2xl font-bold">SIGN UP</h1>
+
+        {/* form */}
+        <form
+          className=" flex flex-col justify-center items-center"
+          onSubmit={submitHandler}
+        >
+          <div className="flex flex-col gap-7">
+            {
+              // input field component
+              SignupData.map((a: any) => (
+                <InputField
+                  key={a.name}
+                  label={a?.label}
+                  type={a?.type}
+                  required={true}
+                  placeholder={a.placeholder}
+                  value={data[a.name as keyof FormData]}
+                  name={a?.name}
+                  onChange={handleChange}
+                ></InputField>
+              ))
+            }
+          </div>
+
+          {/* button */}
+          <div className="m-12">
+            <CTCButton text={"Next"} type={true} />
+          </div>
+
+          {/* return to login button */}
+          <div className="text-sm text-center">
+            {"Already have a account?"}
+            <div
+              onClick={() => {
+                router.push("/auth/login");
+              }}
+              className="underline cursor-pointer text-blue-500"
+            >
+              Log In
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default Signup;
+
+

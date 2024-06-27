@@ -1,26 +1,17 @@
-"use client"
-import axios from "axios";
-import { value } from "@repo/common/config";
+import Navbar from "@/components/common/Navbar";
+
 export default function Home() {
-
-  async function ftechData(){
-
-    const response = await axios.get('http://localhost:4000/api/default');
-
-    console.log("resposne ka data",response);
-
-  }
   return (
-
-    <div>
-
-      <h1>{value}</h1>
-
-      <h1>this is frontend </h1>
-
-      <button onClick={ftechData}>fetch data</button>
-
-    </div>
+    <>
+      <Navbar />
+      <div className="w-full flex justify-center text-black items-start bg-[#fff]">
+        <div className="w-10/12 flex justify-center items-center text-4xl font-semibold flex-col text-black min-h-screen">
+          <h2>Heyy</h2>
+          <p>This is home page</p>
+        </div>
+      </div>
+    </>
   );
 }
+
 
