@@ -1,0 +1,192 @@
+import { dbConnection } from "@/config/dbConfig";
+import { NextRequest, NextResponse } from "next/server";
+
+import { middleware } from "@/middleware";
+import User from "@/models/user.model";
+
+import { ImageUploader } from "@/helper/imageUploader";
+
+dbConnection();
+
+interface CustomNextRequest extends NextRequest {
+    user: string,
+}
+
+export async function GET(req: CustomNextRequest, res: NextResponse) {
+
+    try {
+
+        await middleware(req);
+
+        let userId = req.user;
+
+        if (!userId) {
+
+            return NextResponse
+                .json(
+                    {
+                        message: "user id is not provided  ",
+                        error: "",
+                        data: null,
+                        success: false,
+                    },
+                    {
+                        status: 401
+                    }
+                );
+        }
+
+
+        const userDetails = await User.findById(userId)
+
+        if (!userDetails) {
+
+            return NextResponse
+                .json(
+                    {
+                        message: "no user found with id '" + userId,
+                        error: "",
+                        data: null,
+                        success: false,
+                    },
+                    {
+                        status: 404
+                    }
+                );
+        }
+
+        return NextResponse
+            .json(
+                {
+                    message: "Sucessfully find user details  '" + userId,
+                    error: "",
+                    data: userDetails,
+                    success: true,  
+                },
+                {
+                    status: 200
+                }
+            );
+
+
+
+    } catch (error: any) {
+
+
+        console.log(error.message);
+
+        return NextResponse
+            .json(
+                {
+                    message: "some error occurred while fetching user details",
+                    error: error.message,
+                    data: null,
+                    success: false,
+                }, {
+                status: 500
+            });
+
+    }
+}
+
+
+
+
+
+
+
+
+export async function POST(req: CustomNextRequest, res: NextResponse) {
+
+    try {
+
+        await middleware(req);
+
+        let userId = req.user;
+
+        if (!userId) {
+
+            return NextResponse
+                .json(
+                    {
+                        message: "user id is not provided  ",
+                        error: "",
+                        data: null,
+                        success: false,
+                    },
+                    {
+                        status: 401
+                    }
+                );
+        }
+
+
+        const {body} = await req.json();
+
+
+        const {imageFile} = body ;
+ 
+
+        if (!imageFile) {
+
+            return NextResponse.json({
+
+                message: "No image file uploaded",
+                error: "",
+                data: null,
+                success: false,
+
+            });
+
+        }
+
+        // upload image to cloudinary 
+
+        let response:any = await ImageUploader(imageFile);
+
+        console.log("uploaded image ",response);
+
+
+        // now we update user profile image 
+
+        const updatedUser = await User.findByIdAndUpdate(userId,{
+
+            profileImage:response.secure_url,
+
+        })
+
+        return NextResponse.json({
+
+            message:"User profile image updated successfully",
+            error:"",
+            data:updatedUser,
+            success:true,
+
+        },{
+
+            status:200,
+        })
+
+
+
+    } catch (error: any) {
+
+        console.log(error.message);
+
+        return NextResponse
+        .json(
+            {
+                message: "some error occurred while fetching user details",
+                error: error.message,
+                data: null,
+                success: false,
+            }, {
+            status: 500
+        });
+
+    }
+}
+
+
+
+
