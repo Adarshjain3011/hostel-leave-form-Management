@@ -1,0 +1,16 @@
+{
+
+  "extends":"@repo/typescript-config/base.json",
+  "compilerOptions": {
+
+    "rootDir": "src",
+    "outDir": "./dist"
+    
+  } // here they are not compile here because they are compile their where they are used 
+  
+}
+
+
+
+
+
