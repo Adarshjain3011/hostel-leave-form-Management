@@ -1,17 +1,19 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export function allowCors(handler: (req: NextRequest) => Promise<NextResponse>) {
-  return async (req: NextRequest) => {
-    const response = await handler(req);
+type NextHandler<T> = (req: T) => Promise<NextResponse>;
 
-    response.headers.set('Access-Control-Allow-Origin', '*');
-    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+export const allowCors = <T extends { method: string }>(fn: NextHandler<T>) => async (req: T) => {
+    const res = NextResponse.next();
+
+    res.headers.set('Access-Control-Allow-Origin', '*');
+    res.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     if (req.method === 'OPTIONS') {
-      return new NextResponse(null, { status: 200 });
+        return res;
     }
 
-    return response;
-  };
-}
+    return fn(req);
+};
+
+
