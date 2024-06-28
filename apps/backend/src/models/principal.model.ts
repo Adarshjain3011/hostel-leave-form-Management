@@ -1,6 +1,6 @@
 
 import mongoose, { Document } from 'mongoose';
-import { COLLEGES } from '@/constants/constant';
+import { COLLEGES } from '@repo/common/config';
 
 
 export interface IPrincipal extends Document {

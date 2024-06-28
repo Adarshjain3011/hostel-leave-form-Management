@@ -2,7 +2,7 @@
 import mongoose, { Document, Model } from 'mongoose';
 
  
-import { HOSTEL } from '@/constants/constant';
+import { HOSTEL } from '@repo/common/config';
 
 export interface IWarden extends Document {
     hostel: string;

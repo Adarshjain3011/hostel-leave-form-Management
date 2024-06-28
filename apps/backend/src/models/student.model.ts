@@ -1,4 +1,4 @@
-import { HOSTEL } from '@/constants/constant';
+import { HOSTEL } from '@repo/common/config';
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IStudent extends Document {

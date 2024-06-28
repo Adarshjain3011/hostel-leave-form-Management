@@ -31,7 +31,7 @@ const LoginPage = () => {
   async function loginHandler() {
     setLoading(true);
     try {
-      const resposne = await axios.post("/api/auth/login", data);
+      const resposne = await axios.post("http://localhost:4000/api/auth/login", data);
       setUser(resposne.data.data);
       toast.success("Login successfully");
       const role = (resposne?.data?.data?.role).toLowerCase();

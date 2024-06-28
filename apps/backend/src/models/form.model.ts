@@ -1,5 +1,6 @@
 import mongoose, { Document, IfAny } from 'mongoose';
-import { STATUS } from "@/constants/constant";
+
+import { STATUS } from '@repo/common/config';
 
 import { IUser } from "@/models/user.model";
 

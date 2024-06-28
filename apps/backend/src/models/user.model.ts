@@ -1,5 +1,5 @@
 import mongoose, { Document, ObjectId } from 'mongoose';
-import { ROLE } from '@/constants/constant';
+import { ROLE } from '@repo/common/config';
 import { IStudent } from './student.model';
 import { IWarden } from './warden.model';
 import { IPrincipal } from './principal.model';

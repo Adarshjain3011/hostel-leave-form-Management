@@ -101,13 +101,13 @@ async function handlePost(req: NextRequest) {
 
     const user = await User.findById(isUserExists._id).select("_id email profileImage fullName");
 
-    const response = new NextResponse(
-      JSON.stringify({
+    const response = NextResponse.json(
+      {
         message: "User logged in successfully",
         status: 200,
         data: user,
         error: null,
-      }),
+      },
       { status: 200 }
     );
 
@@ -175,5 +175,3 @@ async function handleGet(req: NextRequest) {
 
 export const POST = allowCors(handlePost);
 export const GET = allowCors(handleGet);
-
-

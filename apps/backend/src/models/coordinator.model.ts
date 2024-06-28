@@ -1,9 +1,9 @@
 
 import mongoose, { Document } from 'mongoose';
 
-import { COLLEGES } from '@/constants/constant';
+import { COLLEGES } from '@repo/common/config';
 
-import { PROGRAME } from '@/constants/constant';
+import { PROGRAME } from '@repo/common/config';
 
 export interface ICoordinator extends Document {
 
